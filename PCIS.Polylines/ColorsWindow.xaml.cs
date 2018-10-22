@@ -1,13 +1,13 @@
-﻿namespace Polylines
-{
-    using System.Windows;
+﻿using System.Windows;
 
+namespace Polylines
+{
     public partial class ColorsWindow : Window
     {
         public ColorsWindow(MainViewModel mainViewModel)
         {
-            this.InitializeComponent();
-            this.DataContext = mainViewModel;
+            InitializeComponent();
+            DataContext = mainViewModel;
         }
     }
 }
