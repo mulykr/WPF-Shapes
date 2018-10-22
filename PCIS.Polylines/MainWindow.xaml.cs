@@ -12,6 +12,11 @@ namespace Polylines
             DataContext = new MainViewModel();
         }
 
+        /// <summary>
+        /// Function for stop painting line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindowName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key==Key.Space)
@@ -20,7 +25,6 @@ namespace Polylines
                 MessageBox.Show("Put the last point, please");
             }
         }
-
 
         /// <summary>
         /// Function for dragging by KeyBoard
@@ -42,6 +46,7 @@ namespace Polylines
 
                     MainViewModel.selectedPolyline.Points = newPoints;
                 }
+
 
                 if (e.Key == Key.Down)
                 {
