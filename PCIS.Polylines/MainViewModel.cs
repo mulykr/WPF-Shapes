@@ -20,7 +20,7 @@ namespace Polylines
         public ObservableCollection<Polyline> Polylines { get; set; }
         private Polyline CurrentPolyline { get; set; }
         private uint CountEdges { get; set; }
-        public static Polyline selectedPolyline = null;
+        private Polyline selectedPolyline = null;
         private Color currentColor;
         public Color CurrentColor
         {
@@ -72,10 +72,59 @@ namespace Polylines
             Drag_Command = new RelayCommand(Drag);
         }
 
-        //private void KeyboardClick(object obj, System.Windows.Input.KeyEventArgs e)
-        //{
-            
-        //}
+        private void KeyboardClick(object obj, System.Windows.Input.KeyEventArgs e)
+        {
+            if (this != null)
+            {
+                if (e.Key == Key.Up)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X, point.Y - 5));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Down)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X, point.Y + 5));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Left)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X - 5, point.Y));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Right)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in this.selectedPolyline.Points)
+                    {
+                        newPoints.Add(new Point(point.X + 5, point.Y));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+            }
+        }
 
         //Painting
         private void DrawClick(object obj)
