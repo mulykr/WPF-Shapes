@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Polylines"
         mc:Ignorable="d"
         x:Name="MainWindowName" Title="Polylines" Height="550" Width="750"
-        KeyDown="MainWindowName_KeyDown">
+        KeyDown="MainWindowName_KeyDown"
+        PreviewKeyDown="KeyboardClick">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
