@@ -88,26 +88,33 @@
         //Painting
         private void DrawClick(object obj)
         {
-            Point mousePoint = Mouse.GetPosition((IInputElement)obj);
-            CurrentPolyline.Stroke = Brushes.Black;
-            CurrentPolyline.Points.Add(mousePoint);
-            if (EndDrawing && CurrentPolyline.Points.Count >= 2)
+            try
             {
-                ColorsWindow colorWin = new ColorsWindow(this);
-                if (colorWin.ShowDialog() == true)
+                Point mousePoint = Mouse.GetPosition((IInputElement)obj);
+                CurrentPolyline.Stroke = Brushes.Black;
+                CurrentPolyline.Points.Add(mousePoint);
+                if (EndDrawing && CurrentPolyline.Points.Count >= 2)
                 {
-                    CurrentPolyline.Stroke = new SolidColorBrush(CurrentColor);
+                    ColorsWindow colorWin = new ColorsWindow(this);
+                    if (colorWin.ShowDialog() == true)
+                    {
+                        CurrentPolyline.Stroke = new SolidColorBrush(CurrentColor);
+                    }
+                    CurrentPolyline.Name = String.Format("Polyline_{0}", Polylines.Count + 1);
+                    Polylines.Add(CurrentPolyline);
+                    CurrentPolyline = new Polyline();
+                    OnPropertyChanged("Polylines");
+                    CountEdges = 0;
+                    EndDrawing = false;
                 }
-                CurrentPolyline.Name = String.Format("Polyline_{0}", Polylines.Count + 1);
-                Polylines.Add(CurrentPolyline);
-                CurrentPolyline = new Polyline();
-                OnPropertyChanged("Polylines");
-                CountEdges = 0;
-                EndDrawing = false;
+                if (EndDrawing && CurrentPolyline.Points.Count < 2)
+                {
+                    throw new InvalidOperationException("Not enough points");
+                }
             }
-            if(EndDrawing && CurrentPolyline.Points.Count < 2)
+            catch (Exception e)
             {
-                throw new InvalidOperationException("Not enough points");
+                MessageBox.Show($"Error: {e.Message}");
             }
         }
 
