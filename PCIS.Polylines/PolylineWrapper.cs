@@ -16,10 +16,6 @@ namespace Polylines
             }
             set
             {
-                if (value.Count != 6)
-                {
-                    //throw new ArgumentException("Number of point must be 6");
-                }
                 points = value;
             }
         }

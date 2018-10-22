@@ -92,6 +92,10 @@ namespace Polylines
                 CountEdges = 0;
                 EndDrawing = false;
             }
+            if(EndDrawing && CurrentPolyline.Points.Count < 2)
+            {
+                throw new InvalidOperationException("Not enough points");
+            }
         }
 
         private void ApplyColor(object obj)
