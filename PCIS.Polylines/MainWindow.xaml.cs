@@ -47,7 +47,6 @@ namespace Polylines
                     MainViewModel.selectedPolyline.Points = newPoints;
                 }
 
-
                 if (e.Key == Key.Down)
                 {
                     var oldPoints = MainViewModel.selectedPolyline.Points;

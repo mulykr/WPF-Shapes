@@ -7,9 +7,11 @@ namespace Polylines
     [Serializable]
     public class Hexagone
     {
+
         private PointCollection points;
         public PointCollection Points
         {
+
             get
             {
                 return points;
