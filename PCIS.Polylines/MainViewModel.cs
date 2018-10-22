@@ -7,6 +7,11 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Controls;
+using Microsoft.Win32;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace Polylines
 {
@@ -15,6 +20,7 @@ namespace Polylines
         public ObservableCollection<Polyline> Polylines { get; set; }
         private Polyline CurrentPolyline { get; set; }
         private uint CountEdges { get; set; }
+        public static Polyline selectedPolyline = null;
         private Color currentColor;
         public Color CurrentColor
         {
@@ -98,31 +104,69 @@ namespace Polylines
         //File Menu
         private void ClearWindow(object obj)
         {
-            throw new NotImplementedException();
+            Polylines.Clear();
+            OnPropertyChanged("Polylines");
         }
 
         private void OpenFile(object obj)
         {
-            throw new NotImplementedException();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".xml";
+            openFileDialog.Filter = "XML documents (.xml)|*.xml";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string fileName = openFileDialog.FileName;
+                List<Hexagone> polylines = new List<Hexagone>();
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Hexagone>));
+                using (XmlReader reader = XmlReader.Create(fileName))
+                {
+                    polylines = (List<Hexagone>)serializer.Deserialize(reader);
+                }
+                Polylines.Clear();
+                for (int i = 0; i < polylines.Count; ++i)
+                {
+                    Polylines.Add(new Polyline() { Name = String.Format("Polyline_{0}", i + 1), Stroke = new SolidColorBrush(polylines[i].HexagoneColor), Points = polylines[i].Points });
+                }
+                OnPropertyChanged("Polylines");
+            }
         }
 
         private void SaveFile(object obj)
         {
-            throw new NotImplementedException();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = ".xml";
+            saveFileDialog.FileName = "New_shapes.xml";
+            saveFileDialog.Filter = "XML documents (.xml)|*.xml";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string fileName = saveFileDialog.FileName;
+                List<Hexagone> polylines = new List<Hexagone>();
+                foreach (var elem in Polylines)
+                {
+                    polylines.Add(new Hexagone(elem));
+                }
+                using (Stream outputFile = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Hexagone>));
+                    serializer.Serialize(outputFile, polylines);
+                }
+            }
         }
 
         private void CloseWindow(object obj)
         {
-            throw new NotImplementedException();
+            (obj as MainWindow).Close();
         }
 
         //Selecting and draging hexogones
         private void SelectPolyline(object obj)
         {
             Polyline curHexagone = obj as Polyline;
+            selectedPolyline = curHexagone;
             curHexagone.MouseDown += new MouseButtonEventHandler(Hexagone_MouseDown);
             OnPropertyChanged("Polylines");
         }
+
 
         private void Drag(object obj)
         {
@@ -130,6 +174,7 @@ namespace Polylines
             plane.MouseMove += new MouseEventHandler(Canvas_MouseMove);
             plane.MouseUp += new MouseButtonEventHandler(Canvas_MouseUp);
         }
+
 
         //Events
         void Hexagone_MouseDown(object sender, MouseButtonEventArgs e)
@@ -158,5 +203,7 @@ namespace Polylines
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
     }
 }
