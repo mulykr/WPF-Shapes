@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Input;
-
-namespace Polylines
+﻿namespace Polylines
 {
+    using System;
+    using System.Windows.Input;
+
     public class RelayCommand : ICommand
     {
         private Action<object> execute;
@@ -10,11 +10,6 @@ namespace Polylines
         private Predicate<object> canExecute;
 
         private event EventHandler CanExecuteChangedInternal;
-
-        public RelayCommand(Action<object> execute)
-            : this(execute, DefaultCanExecute)
-        {
-        }
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
@@ -30,6 +25,11 @@ namespace Polylines
 
             this.execute = execute;
             this.canExecute = canExecute;
+        }
+
+        public RelayCommand(Action<object> execute)
+            : this(execute, DefaultCanExecute)
+        {
         }
 
         public event EventHandler CanExecuteChanged

@@ -1,27 +1,30 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Shapes;
-using System.Windows.Media;
-using System.Windows.Input;
-using System.Windows.Controls;
-using Microsoft.Win32;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.Xml;
-using System.IO;
-
-namespace Polylines
+﻿namespace Polylines
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Runtime.CompilerServices;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using Microsoft.Win32;
+
     public class MainViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Polyline> Polylines { get; set; }
+
         private Polyline CurrentPolyline { get; set; }
+
         private uint CountEdges { get; set; }
-        public static Polyline selectedPolyline = null;
+
         private Color currentColor;
+
         public Color CurrentColor
         {
             get
@@ -34,6 +37,8 @@ namespace Polylines
                 OnPropertyChanged("CurrentColor");
             }
         }
+
+        public static Polyline selectedPolyline = null;
 
         //Painting
         public ICommand DrawClick_Command { get; private set; }
@@ -72,6 +77,12 @@ namespace Polylines
             Drag_Command = new RelayCommand(Drag);
         }
 
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         //Painting
         private void DrawClick(object obj)
         {
@@ -94,7 +105,7 @@ namespace Polylines
             }
             if(EndDrawing && CurrentPolyline.Points.Count < 2)
             {
-                throw new InvalidOperationException("Not enough points");
+                MessageBox.Show("Not enough points");
             }
         }
 
@@ -190,24 +201,19 @@ namespace Polylines
 
         void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            AllowDragging = false;
+            this.AllowDragging = false;
         }
 
         void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (AllowDragging)
+            if (this.AllowDragging)
             {
-                Canvas.SetLeft(SelectedHexagone, e.GetPosition(sender as IInputElement).X - MousePosition.X);
-                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - MousePosition.Y);
+                Canvas.SetLeft(this.SelectedHexagone, e.GetPosition(sender as IInputElement).X - this.MousePosition.X);
+                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - this.MousePosition.Y);
             }
         }
 
+        
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
     }
 }
