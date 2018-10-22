@@ -21,6 +21,12 @@ namespace Polylines
             }
         }
 
+
+        /// <summary>
+        /// Function for dragging by KeyBoard
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void KeyboardClick(object sender, KeyEventArgs e)
         {
             if (MainViewModel.selectedPolyline != null)
