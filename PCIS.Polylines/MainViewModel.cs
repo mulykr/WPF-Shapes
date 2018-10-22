@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Shapes;
-using System.Windows.Media;
-using System.Windows.Input;
-using System.Windows.Controls;
-using Microsoft.Win32;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.Xml;
-using System.IO;
-
-namespace Polylines
+﻿namespace Polylines
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Runtime.CompilerServices;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using Microsoft.Win32;
+
     public class MainViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Polyline> Polylines { get; set; }
+
         private Polyline CurrentPolyline { get; set; }
+
         private uint CountEdges { get; set; }
+
         public static Polyline selectedPolyline = null;
+
         private Color currentColor;
+
         public Color CurrentColor
         {
             get
@@ -30,26 +35,34 @@ namespace Polylines
             }
             set
             {
-                currentColor = value;
-                OnPropertyChanged("CurrentColor");
+                this.currentColor = value;
+                this.OnPropertyChanged("CurrentColor");
             }
         }
 
         //Painting
         public ICommand DrawClick_Command { get; private set; }
+
         public ICommand ApplyColor_Command { get; set; }
 
         //File Menu
         public ICommand ClearWindow_Command { get; private set; }
+
         public ICommand OpenFile_Command { get; private set; }
+
         public ICommand SaveFile_Command { get; private set; }
+
         public ICommand CloseWindow_Command { get; private set; }
 
         //Selecting and draging polylines
         public ICommand SelectPolyline_Command { get; private set; }
+
         public ICommand Drag_Command { get; private set; }
+
         private bool AllowDragging { get; set; }
+
         private Point MousePosition { get; set; }
+
         private Polyline SelectedHexagone { get; set; }
 
         // End Drawing Polyline
@@ -57,19 +70,19 @@ namespace Polylines
 
         public MainViewModel()
         {
-            Polylines = new ObservableCollection<Polyline>();
-            CountEdges = 0;
-            CurrentColor = Colors.Red;
-            CurrentPolyline = new Polyline();
-            ClearWindow_Command = new RelayCommand(ClearWindow);
-            OpenFile_Command = new RelayCommand(OpenFile);
-            SaveFile_Command = new RelayCommand(SaveFile);
-            CloseWindow_Command = new RelayCommand(CloseWindow);
-            DrawClick_Command = new RelayCommand(DrawClick);
-            ApplyColor_Command = new RelayCommand(ApplyColor);
+            this.Polylines = new ObservableCollection<Polyline>();
+            this.CountEdges = 0;
+            this.CurrentColor = Colors.Red;
+            this.CurrentPolyline = new Polyline();
+            this.ClearWindow_Command = new RelayCommand(this.ClearWindow);
+            this.OpenFile_Command = new RelayCommand(this.OpenFile);
+            this.SaveFile_Command = new RelayCommand(this.SaveFile);
+            this.CloseWindow_Command = new RelayCommand(this.CloseWindow);
+            this.DrawClick_Command = new RelayCommand(this.DrawClick);
+            this.ApplyColor_Command = new RelayCommand(this.ApplyColor);
 
-            SelectPolyline_Command = new RelayCommand(SelectPolyline);
-            Drag_Command = new RelayCommand(Drag);
+            this.SelectPolyline_Command = new RelayCommand(this.SelectPolyline);
+            this.Drag_Command = new RelayCommand(this.Drag);
         }
 
         //Painting
@@ -145,7 +158,7 @@ namespace Polylines
             {
                 string fileName = saveFileDialog.FileName;
                 List<Hexagone> polylines = new List<Hexagone>();
-                foreach (var elem in Polylines)
+                foreach (var elem in this.Polylines)
                 {
                     polylines.Add(new Hexagone(elem));
                 }
@@ -183,7 +196,7 @@ namespace Polylines
         //Events
         void Hexagone_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            AllowDragging = true;
+            this.AllowDragging = true;
             SelectedHexagone = sender as Polyline;
             MousePosition = e.GetPosition(SelectedHexagone);
         }
@@ -197,8 +210,8 @@ namespace Polylines
         {
             if (AllowDragging)
             {
-                Canvas.SetLeft(SelectedHexagone, e.GetPosition(sender as IInputElement).X - MousePosition.X);
-                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - MousePosition.Y);
+                Canvas.SetLeft(SelectedHexagone, e.GetPosition(sender as IInputElement).X - this.MousePosition.X);
+                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - this.MousePosition.Y);
             }
         }
 
