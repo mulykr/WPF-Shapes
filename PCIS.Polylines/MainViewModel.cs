@@ -20,6 +20,7 @@ namespace Polylines
         public ObservableCollection<Polyline> Polylines { get; set; }
         private Polyline CurrentPolyline { get; set; }
         private uint CountEdges { get; set; }
+        private Polyline selectedPolyline = null;
         private Color currentColor;
         public Color CurrentColor
         {
@@ -69,6 +70,60 @@ namespace Polylines
 
             SelectPolyline_Command = new RelayCommand(SelectPolyline);
             Drag_Command = new RelayCommand(Drag);
+        }
+
+        private void KeyboardClick(object obj, System.Windows.Input.KeyEventArgs e)
+        {
+            if (this != null)
+            {
+                if (e.Key == Key.Up)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X, point.Y - 5));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Down)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X, point.Y + 5));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Left)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in oldPoints)
+                    {
+                        newPoints.Add(new Point(point.X - 5, point.Y));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+
+                if (e.Key == Key.Right)
+                {
+                    var oldPoints = this.selectedPolyline.Points;
+                    PointCollection newPoints = new PointCollection();
+                    foreach (var point in this.selectedPolyline.Points)
+                    {
+                        newPoints.Add(new Point(point.X + 5, point.Y));
+                    }
+
+                    this.selectedPolyline.Points = newPoints;
+                }
+            }
         }
 
         //Painting
@@ -156,13 +211,16 @@ namespace Polylines
         {
             (obj as MainWindow).Close();
         }
+
         //Selecting and draging hexogones
         private void SelectPolyline(object obj)
         {
             Polyline curHexagone = obj as Polyline;
+            selectedPolyline = curHexagone;
             curHexagone.MouseDown += new MouseButtonEventHandler(Hexagone_MouseDown);
             OnPropertyChanged("Polylines");
         }
+
 
         private void Drag(object obj)
         {
@@ -170,6 +228,7 @@ namespace Polylines
             plane.MouseMove += new MouseEventHandler(Canvas_MouseMove);
             plane.MouseUp += new MouseButtonEventHandler(Canvas_MouseUp);
         }
+
 
         //Events
         void Hexagone_MouseDown(object sender, MouseButtonEventArgs e)

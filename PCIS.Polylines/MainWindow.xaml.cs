@@ -13,8 +13,11 @@ namespace Polylines
 
         private void MainWindowName_KeyDown(object sender, KeyEventArgs e)
         {
-            MainViewModel.EndDrawing = true;
-            MessageBox.Show("Put the last point, please");
+            if (e.Key==Key.Space)
+            {
+                MainViewModel.EndDrawing = true;
+                MessageBox.Show("Put the last point, please");
+            }
         }
     }
 }
