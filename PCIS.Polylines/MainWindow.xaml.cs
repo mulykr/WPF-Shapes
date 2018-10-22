@@ -6,6 +6,10 @@ namespace Polylines
 {
     public partial class MainWindow : Window
     {
+
+        /// <summary>
+        /// Initialize component of main windom
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

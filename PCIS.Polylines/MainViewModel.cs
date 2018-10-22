@@ -17,11 +17,32 @@ namespace Polylines
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Collection of shapes
+        /// </summary>
         public ObservableCollection<Polyline> Polylines { get; set; }
+
+        /// <summary>
+        /// Current shape
+        /// </summary>
         private Polyline CurrentPolyline { get; set; }
+
+        /// <summary>
+        /// Count of points in shape
+        /// </summary>
         private uint CountEdges { get; set; }
+
+        /// <summary>
+        /// Selected shape
+        /// </summary>
         public static Polyline selectedPolyline = null;
+
+        /// <summary>
+        /// Current color of shape
+        /// </summary>
         private Color currentColor;
+
+
         public Color CurrentColor
         {
             get
@@ -35,26 +56,42 @@ namespace Polylines
             }
         }
 
-        //Painting
+        
+        /// <summary>
+        /// Commands for painting
+        /// </summary>
         public ICommand DrawClick_Command { get; private set; }
         public ICommand ApplyColor_Command { get; set; }
 
-        //File Menu
+        
+        /// <summary>
+        /// File menu commands
+        /// </summary>
         public ICommand ClearWindow_Command { get; private set; }
         public ICommand OpenFile_Command { get; private set; }
         public ICommand SaveFile_Command { get; private set; }
         public ICommand CloseWindow_Command { get; private set; }
 
-        //Selecting and draging polylines
+
+        /// <summary>
+        /// Commands for selecting and draging shapes
+        /// </summary>
         public ICommand SelectPolyline_Command { get; private set; }
         public ICommand Drag_Command { get; private set; }
         private bool AllowDragging { get; set; }
         private Point MousePosition { get; set; }
-        private Polyline SelectedHexagone { get; set; }
+        private Polyline SelectedShape { get; set; }
 
-        // End Drawing Polyline
+
+        /// <summary>
+        /// The variable responsible for the end of drawing
+        /// </summary>
         public static bool EndDrawing { get; set; } = false;
 
+
+        /// <summary>
+        /// Initialize main view model
+        /// </summary>
         public MainViewModel()
         {
             Polylines = new ObservableCollection<Polyline>();
@@ -67,12 +104,15 @@ namespace Polylines
             CloseWindow_Command = new RelayCommand(CloseWindow);
             DrawClick_Command = new RelayCommand(DrawClick);
             ApplyColor_Command = new RelayCommand(ApplyColor);
-
             SelectPolyline_Command = new RelayCommand(SelectPolyline);
             Drag_Command = new RelayCommand(Drag);
         }
 
-        //Painting
+        
+        /// <summary>
+        /// Method for painting shape
+        /// </summary>
+        /// <param name="obj"></param>
         private void DrawClick(object obj)
         {
             Point mousePoint = Mouse.GetPosition((IInputElement)obj);
@@ -94,6 +134,10 @@ namespace Polylines
             }
         }
 
+        /// <summary>
+        /// Methid for apply color for shape
+        /// </summary>
+        /// <param name="obj"></param>
         private void ApplyColor(object obj)
         {
             ColorsWindow colorsWindow = (ColorsWindow)obj;
@@ -101,13 +145,21 @@ namespace Polylines
             colorsWindow.Close();
         }
 
-        //File Menu
+        
+        /// <summary>
+        /// Clear window
+        /// </summary>
+        /// <param name="obj"></param>
         private void ClearWindow(object obj)
         {
             Polylines.Clear();
             OnPropertyChanged("Polylines");
         }
 
+        /// <summary>
+        /// Open file with shape
+        /// </summary>
+        /// <param name="obj"></param>
         private void OpenFile(object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -116,21 +168,25 @@ namespace Polylines
             if (openFileDialog.ShowDialog() == true)
             {
                 string fileName = openFileDialog.FileName;
-                List<Hexagone> polylines = new List<Hexagone>();
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Hexagone>));
+                List<Shape> polylines = new List<Shape>();
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Shape>));
                 using (XmlReader reader = XmlReader.Create(fileName))
                 {
-                    polylines = (List<Hexagone>)serializer.Deserialize(reader);
+                    polylines = (List<Shape>)serializer.Deserialize(reader);
                 }
                 Polylines.Clear();
                 for (int i = 0; i < polylines.Count; ++i)
                 {
-                    Polylines.Add(new Polyline() { Name = String.Format("Polyline_{0}", i + 1), Stroke = new SolidColorBrush(polylines[i].HexagoneColor), Points = polylines[i].Points });
+                    Polylines.Add(new Polyline() { Name = String.Format("Polyline_{0}", i + 1), Stroke = new SolidColorBrush(polylines[i].ShapeColor), Points = polylines[i].Points });
                 }
                 OnPropertyChanged("Polylines");
             }
         }
 
+        /// <summary>
+        /// Save shapes
+        /// </summary>
+        /// <param name="obj"></param>
         private void SaveFile(object obj)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -140,34 +196,44 @@ namespace Polylines
             if (saveFileDialog.ShowDialog() == true)
             {
                 string fileName = saveFileDialog.FileName;
-                List<Hexagone> polylines = new List<Hexagone>();
+                List<Shape> polylines = new List<Shape>();
                 foreach (var elem in Polylines)
                 {
-                    polylines.Add(new Hexagone(elem));
+                    polylines.Add(new Shape(elem));
                 }
                 using (Stream outputFile = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<Hexagone>));
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Shape>));
                     serializer.Serialize(outputFile, polylines);
                 }
             }
         }
 
+        /// <summary>
+        /// Close window
+        /// </summary>
+        /// <param name="obj"></param>
         private void CloseWindow(object obj)
         {
             (obj as MainWindow).Close();
         }
 
-        //Selecting and draging hexogones
+        /// <summary>
+        /// Select a figure from an existing list
+        /// </summary>
+        /// <param name="obj"></param>
         private void SelectPolyline(object obj)
         {
-            Polyline curHexagone = obj as Polyline;
-            selectedPolyline = curHexagone;
-            curHexagone.MouseDown += new MouseButtonEventHandler(Hexagone_MouseDown);
+            Polyline curShape = obj as Polyline;
+            selectedPolyline = curShape;
+            curShape.MouseDown += new MouseButtonEventHandler(Shape_MouseDown);
             OnPropertyChanged("Polylines");
         }
 
-
+        /// <summary>
+        /// Drag shape by mouse
+        /// </summary>
+        /// <param name="obj"></param>
         private void Drag(object obj)
         {
             Canvas plane = (obj as Canvas);
@@ -175,13 +241,12 @@ namespace Polylines
             plane.MouseUp += new MouseButtonEventHandler(Canvas_MouseUp);
         }
 
-
         //Events
-        void Hexagone_MouseDown(object sender, MouseButtonEventArgs e)
+        void Shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
             AllowDragging = true;
-            SelectedHexagone = sender as Polyline;
-            MousePosition = e.GetPosition(SelectedHexagone);
+            SelectedShape = sender as Polyline;
+            MousePosition = e.GetPosition(SelectedShape);
         }
 
         void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -193,8 +258,8 @@ namespace Polylines
         {
             if (AllowDragging)
             {
-                Canvas.SetLeft(SelectedHexagone, e.GetPosition(sender as IInputElement).X - MousePosition.X);
-                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - MousePosition.Y);
+                Canvas.SetLeft(SelectedShape, e.GetPosition(sender as IInputElement).X - MousePosition.X);
+                Canvas.SetTop(SelectedShape, e.GetPosition(sender as IInputElement).Y - MousePosition.Y);
             }
         }
 
@@ -203,7 +268,5 @@ namespace Polylines
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
     }
 }

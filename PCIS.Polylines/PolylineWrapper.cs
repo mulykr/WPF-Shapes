@@ -5,7 +5,7 @@ using System.Windows.Shapes;
 namespace Polylines
 {
     [Serializable]
-    public class Hexagone
+    public class Shape
     {
 
         private PointCollection points;
@@ -26,12 +26,12 @@ namespace Polylines
             }
         }
 
-        public Color HexagoneColor { get; set; }
-        public Hexagone() { }
-        public Hexagone(Polyline figure)
+        public Color ShapeColor { get; set; }
+        public Shape() { }
+        public Shape(Polyline figure)
         {
             Points = figure.Points;
-            HexagoneColor = (figure.Stroke as SolidColorBrush).Color;
+            ShapeColor = (figure.Stroke as SolidColorBrush).Color;
         }
     }
 }
