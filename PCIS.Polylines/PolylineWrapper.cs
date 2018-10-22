@@ -23,6 +23,7 @@ namespace Polylines
                 points = value;
             }
         }
+
         public Color HexagoneColor { get; set; }
         public Hexagone() { }
         public Hexagone(Polyline figure)
