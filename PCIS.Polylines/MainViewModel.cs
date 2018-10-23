@@ -15,6 +15,9 @@
     using System.Xml.Serialization;
     using Microsoft.Win32;
 
+    /// <summary>
+    /// Main view model class
+    /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
         /// <summary>
@@ -22,7 +25,6 @@
         /// </summary>
         public ObservableCollection<Polyline> Polylines { get; set; }
 
-<<<<<<< HEAD
         /// <summary>
         /// Current shape
         /// </summary>
@@ -42,18 +44,8 @@
         /// Current color of shape
         /// </summary>
         private Color currentColor;
+        public ObservableCollection<Polyline> Shape;
 
-
-=======
-        private Polyline CurrentPolyline { get; set; }
-
-        private uint CountEdges { get; set; }
-
-        public static Polyline selectedPolyline = null;
-
-        private Color currentColor;
-
->>>>>>> master
         public Color CurrentColor
         {
             get
@@ -98,12 +90,8 @@
         private bool AllowDragging { get; set; }
 
         private Point MousePosition { get; set; }
-<<<<<<< HEAD
-        private Polyline SelectedShape { get; set; }
-=======
 
-        private Polyline SelectedHexagone { get; set; }
->>>>>>> master
+        private Polyline SelectedShape { get; set; }
 
 
         /// <summary>
@@ -117,7 +105,6 @@
         /// </summary>
         public MainViewModel()
         {
-<<<<<<< HEAD
             Polylines = new ObservableCollection<Polyline>();
             CountEdges = 0;
             CurrentColor = Colors.Red;
@@ -130,21 +117,6 @@
             ApplyColor_Command = new RelayCommand(ApplyColor);
             SelectPolyline_Command = new RelayCommand(SelectPolyline);
             Drag_Command = new RelayCommand(Drag);
-=======
-            this.Polylines = new ObservableCollection<Polyline>();
-            this.CountEdges = 0;
-            this.CurrentColor = Colors.Red;
-            this.CurrentPolyline = new Polyline();
-            this.ClearWindow_Command = new RelayCommand(this.ClearWindow);
-            this.OpenFile_Command = new RelayCommand(this.OpenFile);
-            this.SaveFile_Command = new RelayCommand(this.SaveFile);
-            this.CloseWindow_Command = new RelayCommand(this.CloseWindow);
-            this.DrawClick_Command = new RelayCommand(this.DrawClick);
-            this.ApplyColor_Command = new RelayCommand(this.ApplyColor);
-
-            this.SelectPolyline_Command = new RelayCommand(this.SelectPolyline);
-            this.Drag_Command = new RelayCommand(this.Drag);
->>>>>>> master
         }
 
         
@@ -246,13 +218,8 @@
             if (saveFileDialog.ShowDialog() == true)
             {
                 string fileName = saveFileDialog.FileName;
-<<<<<<< HEAD
                 List<Shape> polylines = new List<Shape>();
                 foreach (var elem in Polylines)
-=======
-                List<Hexagone> polylines = new List<Hexagone>();
-                foreach (var elem in this.Polylines)
->>>>>>> master
                 {
                     polylines.Add(new Shape(elem));
                 }
@@ -299,15 +266,9 @@
         //Events
         void Shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
-<<<<<<< HEAD
             AllowDragging = true;
             SelectedShape = sender as Polyline;
             MousePosition = e.GetPosition(SelectedShape);
-=======
-            this.AllowDragging = true;
-            SelectedHexagone = sender as Polyline;
-            MousePosition = e.GetPosition(SelectedHexagone);
->>>>>>> master
         }
 
         void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -319,13 +280,8 @@
         {
             if (AllowDragging)
             {
-<<<<<<< HEAD
                 Canvas.SetLeft(SelectedShape, e.GetPosition(sender as IInputElement).X - MousePosition.X);
                 Canvas.SetTop(SelectedShape, e.GetPosition(sender as IInputElement).Y - MousePosition.Y);
-=======
-                Canvas.SetLeft(SelectedHexagone, e.GetPosition(sender as IInputElement).X - this.MousePosition.X);
-                Canvas.SetTop(SelectedHexagone, e.GetPosition(sender as IInputElement).Y - this.MousePosition.Y);
->>>>>>> master
             }
         }
 
