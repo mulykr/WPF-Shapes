@@ -15,7 +15,55 @@ namespace Polylines
             InitializeComponent();
             DataContext = new MainViewModel();
         }
-        
+
+        void KeyUpFunction()
+        {
+            var oldPoints = MainViewModel.selectedPolyline.Points;
+            PointCollection newPoints = new PointCollection();
+            foreach (var point in oldPoints)
+            {
+                newPoints.Add(new Point(point.X, point.Y + 5));
+            }
+
+            MainViewModel.selectedPolyline.Points = newPoints;
+        }
+
+        void KeyDownFunction()
+        {
+            var oldPoints = MainViewModel.selectedPolyline.Points;
+            PointCollection newPoints = new PointCollection();
+            foreach (var point in oldPoints)
+            {
+                newPoints.Add(new Point(point.X, point.Y - 5));
+            }
+
+            MainViewModel.selectedPolyline.Points = newPoints;
+        }
+
+        void KeyLefFinction()
+        {
+            var oldPoints = MainViewModel.selectedPolyline.Points;
+            PointCollection newPoints = new PointCollection();
+            foreach (var point in oldPoints)
+            {
+                newPoints.Add(new Point(point.X - 5, point.Y));
+            }
+
+            MainViewModel.selectedPolyline.Points = newPoints;
+        }
+
+        void KeyRightFunction()
+        {
+            var oldPoints = MainViewModel.selectedPolyline.Points;
+            PointCollection newPoints = new PointCollection();
+            foreach (var point in MainViewModel.selectedPolyline.Points)
+            {
+                newPoints.Add(new Point(point.X + 5, point.Y));
+            }
+
+            MainViewModel.selectedPolyline.Points = newPoints;
+        }
+
         /// <summary>
         /// Function for stop painting line
         /// </summary>
@@ -41,50 +89,22 @@ namespace Polylines
             {
                 if (e.Key == Key.Up)
                 {
-                    var oldPoints = MainViewModel.selectedPolyline.Points;
-                    PointCollection newPoints = new PointCollection();
-                    foreach (var point in oldPoints)
-                    {
-                        newPoints.Add(new Point(point.X, point.Y - 5));
-                    }
-
-                    MainViewModel.selectedPolyline.Points = newPoints;
+                    KeyDownFunction();
                 }
 
                 if (e.Key == Key.Down)
                 {
-                    var oldPoints = MainViewModel.selectedPolyline.Points;
-                    PointCollection newPoints = new PointCollection();
-                    foreach (var point in oldPoints)
-                    {
-                        newPoints.Add(new Point(point.X, point.Y + 5));
-                    }
-
-                    MainViewModel.selectedPolyline.Points = newPoints;
+                    KeyUpFunction();
                 }
 
                 if (e.Key == Key.Left)
                 {
-                    var oldPoints = MainViewModel.selectedPolyline.Points;
-                    PointCollection newPoints = new PointCollection();
-                    foreach (var point in oldPoints)
-                    {
-                        newPoints.Add(new Point(point.X - 5, point.Y));
-                    }
-
-                    MainViewModel.selectedPolyline.Points = newPoints;
+                    KeyLefFinction();
                 }
 
                 if (e.Key == Key.Right)
                 {
-                    var oldPoints = MainViewModel.selectedPolyline.Points;
-                    PointCollection newPoints = new PointCollection();
-                    foreach (var point in MainViewModel.selectedPolyline.Points)
-                    {
-                        newPoints.Add(new Point(point.X + 5, point.Y));
-                    }
-
-                    MainViewModel.selectedPolyline.Points = newPoints;
+                    KeyRightFunction();
                 }
             }
         }

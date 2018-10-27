@@ -285,6 +285,18 @@
             }
         }
 
+        public void KeyDown()
+        {
+            var oldPoints = MainViewModel.selectedPolyline.Points;
+            PointCollection newPoints = new PointCollection();
+            foreach (var point in oldPoints)
+            {
+                newPoints.Add(new Point(point.X, point.Y - 5));
+            }
+
+            MainViewModel.selectedPolyline.Points = newPoints;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
