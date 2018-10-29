@@ -248,8 +248,11 @@
         /// <param name="obj"></param>
         private void SelectPolyline(object obj)
         {
+            if (selectedPolyline != null)
+                selectedPolyline.StrokeThickness = 1;
             Polyline curShape = obj as Polyline;
             selectedPolyline = curShape;
+            selectedPolyline.StrokeThickness = 5;
             curShape.MouseDown += new MouseButtonEventHandler(Shape_MouseDown);
             OnPropertyChanged("Polylines");
         }
