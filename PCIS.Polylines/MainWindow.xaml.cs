@@ -17,6 +17,7 @@ namespace Polylines
             MVM.JustDrawn += RestoreBtn;
             MVM.NewPointAdded += NewPointAdded;
             NewPointAdded();
+            MVM.TitleChanged += ChangeTitle;
         }
 
         public static MainViewModel MVM { get; set; }
@@ -145,6 +146,11 @@ namespace Polylines
                 FinishDrawingBTN.Content = "Finish drawing";
                 FinishDrawingBTN.IsEnabled = true;
             }
+        }
+
+        private void ChangeTitle(string newTitle)
+        {
+            this.Title = newTitle;
         }
     }
 }

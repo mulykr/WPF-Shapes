@@ -20,6 +20,8 @@
     /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
+        private string WindowTitle { get; set; } = "New_Shapes";
+
         /// <summary>
         /// Collection of shapes
         /// </summary>
@@ -48,6 +50,7 @@
 
         public event Action JustDrawn;
         public event Action NewPointAdded;
+        public event Action<string> TitleChanged;
 
         public Color CurrentColor
         {
@@ -198,6 +201,8 @@
             if (openFileDialog.ShowDialog() == true)
             {
                 string fileName = openFileDialog.FileName;
+                WindowTitle = fileName;
+                TitleChanged?.Invoke(WindowTitle);
                 List<Shape> polylines = new List<Shape>();
                 XmlSerializer serializer = new XmlSerializer(typeof(List<Shape>));
                 using (XmlReader reader = XmlReader.Create(fileName))
@@ -226,6 +231,8 @@
             if (saveFileDialog.ShowDialog() == true)
             {
                 string fileName = saveFileDialog.FileName;
+                WindowTitle = fileName;
+                TitleChanged(WindowTitle);
                 List<Shape> polylines = new List<Shape>();
                 foreach (var elem in Polylines)
                 {
