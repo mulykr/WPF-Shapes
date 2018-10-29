@@ -28,7 +28,7 @@
         /// <summary>
         /// Current shape
         /// </summary>
-        private Polyline CurrentPolyline { get; set; }
+        public Polyline CurrentPolyline { get; set; }
 
         /// <summary>
         /// Count of points in shape
@@ -45,6 +45,9 @@
         /// </summary>
         private Color currentColor;
         public ObservableCollection<Polyline> Shape;
+
+        public event Action JustDrawn;
+        public event Action NewPointAdded;
 
         public Color CurrentColor
         {
@@ -133,6 +136,7 @@
                 Point mousePoint = Mouse.GetPosition((IInputElement)obj);
                 CurrentPolyline.Stroke = Brushes.Black;
                 CurrentPolyline.Points.Add(mousePoint);
+                NewPointAdded?.Invoke();
                 if (EndDrawing && CurrentPolyline.Points.Count >= 2)
                 {
                     ColorsWindow colorWin = new ColorsWindow(this);
@@ -146,6 +150,8 @@
                     OnPropertyChanged("Polylines");
                     CountEdges = 0;
                     EndDrawing = false;
+
+                    JustDrawn?.Invoke();
                 }
                 if (EndDrawing && CurrentPolyline.Points.Count < 2)
                 {

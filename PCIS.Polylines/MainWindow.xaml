@@ -28,6 +28,7 @@
                     </Style>
                 </MenuItem.ItemContainerStyle>
             </MenuItem>
+            <Button Content="Finish drawing" Width="346" Click="Button_Click" Name="FinishDrawingBTN"/>
         </Menu>
         <ItemsControl ItemsSource="{Binding Polylines}" DockPanel.Dock="Bottom">
             <ItemsControl.ItemsPanel>

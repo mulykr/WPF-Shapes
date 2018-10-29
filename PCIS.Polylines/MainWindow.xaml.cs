@@ -14,6 +14,9 @@ namespace Polylines
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+            MVM.JustDrawn += RestoreBtn;
+            MVM.NewPointAdded += NewPointAdded;
+            NewPointAdded();
         }
 
         public static MainViewModel MVM { get; set; }
@@ -113,7 +116,35 @@ namespace Polylines
 
         private void MainWindowName_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MVM.SaveFile_Command.Execute(null);
+            if (MVM.Polylines.Count != 0)
+                MVM.SaveFile_Command.Execute(null);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.EndDrawing = true;
+            FinishDrawingBTN.Content = "Put the last point";
+            FinishDrawingBTN.IsEnabled = false;
+        }
+
+        private void RestoreBtn()
+        {
+            FinishDrawingBTN.Content = "Put some points";
+            FinishDrawingBTN.IsEnabled = false;
+        }
+
+        private void NewPointAdded()
+        {
+            if (MVM.CurrentPolyline.Points.Count < 1)
+            {
+                FinishDrawingBTN.Content = "Put some points";
+                FinishDrawingBTN.IsEnabled = false;
+            }
+            else
+            {
+                FinishDrawingBTN.Content = "Finish drawing";
+                FinishDrawingBTN.IsEnabled = true;
+            }
         }
     }
 }
