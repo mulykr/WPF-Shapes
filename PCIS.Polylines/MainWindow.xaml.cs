@@ -16,6 +16,8 @@ namespace Polylines
             DataContext = new MainViewModel();
         }
 
+        public static MainViewModel MVM { get; set; }
+
         void KeyUpFunction()
         {
             var oldPoints = MainViewModel.selectedPolyline.Points;
@@ -107,6 +109,11 @@ namespace Polylines
                     KeyRightFunction();
                 }
             }
+        }
+
+        private void MainWindowName_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MVM.SaveFile_Command.Execute(null);
         }
     }
 }

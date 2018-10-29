@@ -117,6 +117,8 @@
             ApplyColor_Command = new RelayCommand(ApplyColor);
             SelectPolyline_Command = new RelayCommand(SelectPolyline);
             Drag_Command = new RelayCommand(Drag);
+
+            MainWindow.MVM = this;
         }
 
         
