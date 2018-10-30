@@ -34,8 +34,6 @@
             Shape.ShapeColor = Colors.Red;
             Assert.AreEqual(Shape.ShapeColor, Colors.Red);
         }
-
-
     }
 }
 

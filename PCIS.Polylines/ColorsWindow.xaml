@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Polylines"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         x:Name="ColorsWindowName" Title="Colors" Height="101.608" Width="213.055">
     <Grid>
         <Grid.ColumnDefinitions>
